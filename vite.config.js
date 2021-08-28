@@ -13,18 +13,18 @@ export default {
             // string shorthand
             // '/foo': 'http://localhost:4567',
             // with options
-            // '/api': {
-            //     target: 'http://jsonplaceholder.typicode.com',
-            //     changeOrigin: true,
-            //     rewrite: (path) => path.replace(/^\/api/, '')
-            // },
+            '/api': {
+                target: 'http://127.0.0.1:8888',
+                changeOrigin: true,
+                rewrite: (path) => path.replace(/^\/api/, '')
+            },
             // // with RegEx
             // '^/fallback/.*': {
             //     target: 'http://jsonplaceholder.typicode.com',
             //     changeOrigin: true,
             //     rewrite: (path) => path.replace(/^\/fallback/, '')
             // },
-            // // Using the proxy instance
+            // Using the proxy instance
             // '/api': {
             //     target: 'http://jsonplaceholder.typicode.com',
             //     changeOrigin: true,

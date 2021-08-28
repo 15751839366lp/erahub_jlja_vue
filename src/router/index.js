@@ -127,8 +127,9 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-    document.title = `${to.meta.title} | vue-manage-system`;
+    document.title = `${to.meta.title} | erahub_jlja`;
     const role = localStorage.getItem('ms_username');
+    const token = localStorage.getItem('token');
     if (!role && to.path !== '/login') {
         next('/login');
     } else if (to.meta.permission) {

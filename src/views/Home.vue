@@ -32,9 +32,9 @@ export default {
     setup() {
         const store = useStore();
         const tagsList = computed(() =>
-            store.state.tagsList.map((item) => item.name)
+            store.state.component.tagsList.map((item) => item.name)
         );
-        const collapse = computed(() => store.state.collapse);
+        const collapse = computed(() => store.state.component.collapse);
         return {
             tagsList,
             collapse,
