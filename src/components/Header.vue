@@ -45,16 +45,18 @@
 import { computed, onMounted } from "vue";
 import { useStore } from "vuex";
 import { useRouter } from "vue-router";
+import {login, logout} from "../api/login";
+import {ElMessage} from "element-plus";
 export default {
     setup() {
         const username = localStorage.getItem("ms_username");
         const message = 2;
 
         const store = useStore();
-        const collapse = computed(() => store.state.collapse);
+        const collapse = computed(() => store.state.component.collapse);
         // 侧边栏折叠
         const collapseChage = () => {
-            store.commit("handleCollapse", !collapse.value);
+            store.commit("component/handleCollapse", !collapse.value);
         };
 
         onMounted(() => {
@@ -67,8 +69,15 @@ export default {
         const router = useRouter();
         const handleCommand = (command) => {
             if (command == "loginout") {
-                localStorage.removeItem("ms_username");
-                router.push("/login");
+                logout().then(res => {
+                    ElMessage.success("登出成功");
+                    localStorage.removeItem("ms_username");
+                    localStorage.removeItem("token");
+                    router.push("/login");
+                }).catch(err => {
+                    router.push("/login");
+                })
+
             } else if (command == "user") {
                 router.push("/user");
             }
