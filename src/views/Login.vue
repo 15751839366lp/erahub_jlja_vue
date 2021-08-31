@@ -29,11 +29,12 @@
     import {ref, reactive} from "vue";
     import {useStore} from "vuex";
     import {useRouter} from "vue-router";
-    import {ElMessage} from "element-plus";
+    import {ElMessage, ElLoading} from "element-plus";
     import {login} from "../api/login";
 
     export default {
         setup() {
+            const store = useStore();
             const router = useRouter();
             const param = reactive({
                 username: "",
@@ -60,14 +61,17 @@
             const submitForm = () => {
                 loginForm.value.validate((valid) => {
                     if (valid) {
+                        let loading = ElLoading.service({
+                            text: 'Loading',
+                        });
                         login(param).then(res => {
-                            ElMessage.success("登录成功");
                             localStorage.setItem("ms_username", param.username);
                             localStorage.setItem("token", res.headers.authorization);
-                            console.log(localStorage)
-                            router.push("/");
+                            ElMessage.success("登录成功");
+                            router.push('/');
+                            loading.close();
                         }).catch(err => {
-
+                            loading.close();
                         })
                     } else {
                         return false;
@@ -75,7 +79,6 @@
                 });
             };
 
-            const store = useStore();
             store.commit("component/clearTags");
 
             return {
