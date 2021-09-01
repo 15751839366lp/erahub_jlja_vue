@@ -12,6 +12,7 @@ export default ({
         roles: [],
         permissions: [],
         expire: false,
+        menus: [],
         setting: {
             articlePlatform: []
         }
@@ -39,6 +40,9 @@ export default ({
         SET_EXPIRE: (state, expire) => {
             state.expire = expire
         },
+        SET_MENUS: (state, menus) => {
+            state.menus = menus
+        },
     },
 
     actions: {
@@ -64,6 +68,7 @@ export default ({
                 commit('SET_LOCKED', user.locked);
                 commit('SET_ROLES', user.roles);
                 commit('SET_PERMISSIONS', user.permissions);
+                commit('SET_MENUS', user.menus);
                 // const router = useRouter();
                 // router.push('/');
             }).catch(error => {
