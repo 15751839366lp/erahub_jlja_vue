@@ -1,5 +1,6 @@
 <template>
     <div class="login-wrap">
+        <particles></particles>
         <div class="ms-login">
             <div class="ms-title">后台管理系统</div>
             <el-form :model="param" :rules="rules" ref="loginForm" label-width="0px" class="ms-content">
@@ -31,8 +32,13 @@
     import {useRouter} from "vue-router";
     import {ElMessage, ElLoading} from "element-plus";
     import {login} from "../api/login";
+    import Particles from '../components/particles/index.vue'
 
     export default {
+        components: {
+            "particles":Particles
+        },
+
         setup() {
             const store = useStore();
             const router = useRouter();
@@ -93,11 +99,11 @@
 
 <style scoped>
     .login-wrap {
-        position: relative;
-        width: 100%;
+        background-image: linear-gradient(-180deg, #1a1454 0%, #0e81a5 100%);
+        /*background-image: url("../images/bg_login.png");*/
+        background-repeat: no-repeat;
+        background-size: cover;
         height: 100%;
-        background-image: url(../assets/img/login-bg.jpg);
-        background-size: 100%;
     }
 
     .ms-title {
@@ -110,6 +116,7 @@
     }
 
     .ms-login {
+        z-index:999;
         position: absolute;
         left: 50%;
         top: 50%;

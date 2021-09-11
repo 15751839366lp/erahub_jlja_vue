@@ -11,7 +11,9 @@
                         </template>
                         <template v-for="subItem in item.subs">
                             <el-submenu v-if="subItem.subs" :index="subItem.url" :key="subItem.url">
-                                <template #title>{{ subItem.permission }}</template>
+                                <template #title>
+                                    {{ subItem.permission }}
+                                </template>
                                 <el-menu-item v-for="(threeItem, i) in subItem.subs" :key="i" :index="threeItem.url">
                                     {{ threeItem.permission }}
                                 </el-menu-item>
