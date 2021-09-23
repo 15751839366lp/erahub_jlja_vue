@@ -62,8 +62,6 @@
             };
 
             onMounted(async () => {
-                let t = await store.dispatch("login/getUserInfo");
-
                 if (document.body.clientWidth < 1500) {
                     collapseChage();
                 }

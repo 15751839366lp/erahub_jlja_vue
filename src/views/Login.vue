@@ -31,7 +31,7 @@
     import {useStore} from "vuex";
     import {useRouter} from "vue-router";
     import {ElMessage, ElLoading} from "element-plus";
-    import {login} from "../api/login";
+    import {login,getUserInfo} from "../api/login";
     import Particles from '../components/particles/index.vue'
 
     export default {
@@ -74,8 +74,12 @@
                             localStorage.setItem("ms_username", param.username);
                             localStorage.setItem("token", res.headers.authorization);
                             ElMessage.success("登录成功");
-                            router.push('/');
-                            loading.close();
+                            store.dispatch("login/getUserInfo").then(() => {
+                                router.push('/');
+                                loading.close();
+                            }).catch(() => {
+                                ElMessage.error("数据错误");
+                            });
                         }).catch(err => {
                             loading.close();
                         })
