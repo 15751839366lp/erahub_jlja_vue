@@ -18,7 +18,38 @@ const routes = [
                     title: '系统首页'
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
-            }, {
+            },{
+                path: "/authoritymanage",
+                name: "authoritymanage",
+                meta: {
+                    title: '权限控制'
+                },
+                component: () => import ("../views/authoritymanage/usermanage/UserManage.vue"),
+                children: [
+                    {
+                        path: "permissionmanage",
+                        name: "permissionmanage",
+                        meta: {
+                            title: '资源管理'
+                        },
+                        component: () => import ("../views/authoritymanage/permissionmanage/PermissionManage.vue"),
+                    },{
+                        path: "rolemanage",
+                        name: "rolemanage",
+                        meta: {
+                            title: '角色管理'
+                        },
+                        component: () => import ("../views/authoritymanage/rolemanage/RoleManage.vue"),
+                    },{
+                        path: "usermanage",
+                        name: "usermanage",
+                        meta: {
+                            title: '用户管理'
+                        },
+                        component: () => import ("../views/authoritymanage/usermanage/UserManage.vue"),
+                    },
+                ]
+            },{
                 path: "/table",
                 name: "basetable",
                 meta: {
