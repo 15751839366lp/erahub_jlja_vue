@@ -16,7 +16,7 @@
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
-            <el-table :data="tableData" border class="table" ref="multipleTable" header-cell-class-name="table-header">
+            <el-table :data="tableData" border class="table" ref="multipleTable" height="600" style="width: 100%" header-cell-class-name="table-header">
                 <el-table-column fixed prop="id" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column fixed prop="name" label="用户名"></el-table-column>
                 <el-table-column label="账户余额">
@@ -42,7 +42,7 @@
                 </el-table-column>
 
                 <el-table-column prop="date" label="注册时间"></el-table-column>
-                <el-table-column fixed label="操作" width="180" align="center">
+                <el-table-column fixed="right" label="操作" width="180" align="center">
                     <template #default="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
                         </el-button>
@@ -96,8 +96,157 @@ export default {
         // 获取表格数据
         const getData = () => {
             fetchData(query).then((res) => {
-                tableData.value = res.list;
-                pageTotal.value = res.pageTotal || 50;
+                tableData.value = [{
+                    "id": 1,
+                    "name": "张三",
+                    "money": 123,
+                    "address": "广东省东莞市长安镇",
+                    "state": "成功",
+                    "date": "2019-11-1",
+                    "thumb": "https://lin-xin.gitee.io/images/post/wms.png"
+                },
+                    {
+                        "id": 2,
+                        "name": "李四",
+                        "money": 456,
+                        "address": "广东省广州市白云区",
+                        "state": "成功",
+                        "date": "2019-10-11",
+                        "thumb": "https://lin-xin.gitee.io/images/post/node3.png"
+                    },
+                    {
+                        "id": 3,
+                        "name": "王五",
+                        "money": 789,
+                        "address": "湖南省长沙市",
+                        "state": "失败",
+                        "date": "2019-11-11",
+                        "thumb": "https://lin-xin.gitee.io/images/post/parcel.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },{
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },{
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },{
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },{
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                    {
+                        "id": 4,
+                        "name": "赵六",
+                        "money": 1011,
+                        "address": "福建省厦门市鼓浪屿",
+                        "state": "成功",
+                        "date": "2019-10-20",
+                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
+                    },
+                ];
+                pageTotal.value = res.pageTotal || 1000;
             });
         };
         getData();

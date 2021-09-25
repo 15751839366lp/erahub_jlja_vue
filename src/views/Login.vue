@@ -31,7 +31,7 @@
     import {useStore} from "vuex";
     import {useRouter} from "vue-router";
     import {ElMessage, ElLoading} from "element-plus";
-    import {login,getUserInfo} from "../api/login";
+    import {login} from "../api/login";
     import Particles from '../components/particles/index.vue'
 
     export default {
