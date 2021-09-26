@@ -77,6 +77,7 @@
                                 return false;
                             }
                             localStorage.setItem("ms_username", param.username);
+                            localStorage.setItem("ms_true_name", param.trueName);
                             localStorage.setItem("token", res.headers.authorization);
                             store.dispatch("login/getUserInfo").then(() => {
                                 router.push('/');

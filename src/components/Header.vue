@@ -24,7 +24,7 @@
                 <!-- 用户名下拉菜单 -->
                 <el-dropdown class="user-name" trigger="click" @command="handleCommand">
                     <span class="el-dropdown-link">
-                        {{username}}
+                        {{trueName}}
                         <i class="el-icon-caret-bottom"></i>
                     </span>
                     <template #dropdown>
@@ -54,6 +54,7 @@
             const router = useRouter();
 
             let username = store.state.login.username;
+            let trueName = store.state.login.trueName;
             const message = 2;
             const collapse = computed(() => store.state.component.collapse);
             // 侧边栏折叠
@@ -87,6 +88,7 @@
 
             return {
                 username,
+                trueName,
                 message,
                 collapse,
                 collapseChage,

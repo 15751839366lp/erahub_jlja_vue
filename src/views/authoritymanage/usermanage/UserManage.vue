@@ -19,13 +19,15 @@
             <el-table :data="tableData" border class="table" ref="multipleTable"
                       height="500" style="width: 100%" row-style="height:30px" :cell-style="{padding:'2px 0'}"
                       header-cell-class-name="table-header">
+                <el-table-column type="selection" width="55" align="center"/>
                 <el-table-column fixed prop="id" label="ID" width="55" align="center"></el-table-column>
                 <el-table-column fixed prop="username" label="用户名" width="150" align="center"></el-table-column>
+                <el-table-column prop="trueName" label="真实姓名" width="150" align="center"></el-table-column>
                 <el-table-column prop="createTime" label="创建时间"></el-table-column>
                 <el-table-column prop="updateTime" label="更新时间"></el-table-column>
-                <el-table-column width="100" label="锁定" align="center">
+                <el-table-column fixed="right" width="100" label="锁定" align="center">
                     <template #default="scope">
-                        <el-switch :loading="lockSwitchLoading" v-model="scope.row.lockedModel" @change="switchBeforeChange(scope)" active-color="#13ce66" inactive-color="#ff4949" />
+                        <el-switch :loading="scope.row.lockSwitchLoading" v-model="scope.row.lockedModel" @change="switchBeforeChange(scope)" active-color="#13ce66" inactive-color="#ff4949" />
                     </template>
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="180" align="center">
@@ -84,12 +86,12 @@ export default {
         });
         const tableData = ref([]);
         const pageTotal = ref(0);
-        const lockSwitchLoading = ref(false);
         // 获取表格数据
         const getData = () => {
             getUserList(query).then((res) => {
                 res.data.data.records.forEach(function (userData) {
                     userData.lockedModel = !userData.locked;
+                    userData.lockSwitchLoading = false;
                 });
                 tableData.value = res.data.data.records;
                 pageTotal.value = res.data.data.total;
@@ -149,7 +151,7 @@ export default {
 
         //锁定用户
         const switchBeforeChange = (scope) => {
-            lockSwitchLoading.value = true;
+            scope.row.lockSwitchLoading = true;
             let data = {
                 "id": scope.row.id,
                 "locked": !scope.row.locked,
@@ -161,14 +163,15 @@ export default {
                 }else{
                     ElMessage.success(`锁定成功`);
                 }
-                lockSwitchLoading.value = false;
+                scope.row.lockSwitchLoading = false;
             }).catch((error)=>{
                 if(scope.row.locked){
                     ElMessage.error(`解锁失败`);
                 }else{
                     ElMessage.error(`锁定失败`);
                 }
-                lockSwitchLoading.value = false;
+                scope.row.lockSwitchLoading = false;
+                return false;
             });
         };
 
@@ -176,7 +179,6 @@ export default {
             query,
             tableData,
             pageTotal,
-            lockSwitchLoading,
             editVisible,
             form,
             handleSearch,

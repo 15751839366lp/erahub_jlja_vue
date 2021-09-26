@@ -1,12 +1,12 @@
 import {createRouter, createWebHashHistory} from "vue-router";
+import authorityManage from "./modules/authorityManage";
 import Home from "../views/Home.vue";
 
 const routes = [
     {
         path: '/',
         redirect: '/dashboard'
-    },
-    {
+    }, {
         path: "/",
         name: "Home",
         component: Home,
@@ -18,38 +18,7 @@ const routes = [
                     title: '系统首页'
                 },
                 component: () => import ( /* webpackChunkName: "dashboard" */ "../views/Dashboard.vue")
-            },{
-                path: "/authoritymanage",
-                name: "authoritymanage",
-                meta: {
-                    title: '权限控制'
-                },
-                component: () => import ("../views/authoritymanage/usermanage/UserManage.vue"),
-                children: [
-                    {
-                        path: "permissionmanage",
-                        name: "permissionmanage",
-                        meta: {
-                            title: '资源管理'
-                        },
-                        component: () => import ("../views/authoritymanage/permissionmanage/PermissionManage.vue"),
-                    },{
-                        path: "rolemanage",
-                        name: "rolemanage",
-                        meta: {
-                            title: '角色管理'
-                        },
-                        component: () => import ("../views/authoritymanage/rolemanage/RoleManage.vue"),
-                    },{
-                        path: "usermanage",
-                        name: "usermanage",
-                        meta: {
-                            title: '用户管理'
-                        },
-                        component: () => import ("../views/authoritymanage/usermanage/UserManage.vue"),
-                    },
-                ]
-            },{
+            }, {
                 path: "/table",
                 name: "basetable",
                 meta: {
@@ -142,7 +111,7 @@ const routes = [
                 },
                 component: () => import (/* webpackChunkName: "editor" */ '../views/Editor.vue')
             }
-        ]
+        ].concat(authorityManage)
     },
     {
         path: "/login",
@@ -161,10 +130,10 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const token = window.localStorage.getItem('token');//获取浏览器缓存的用户信息
-    if(token){ //如果有就直接到首页咯
+    if (token) { //如果有就直接到首页咯
         next();
     } else {
-        if(to.path=='/login'){ //如果是登录页面路径，就直接next()
+        if (to.path == '/login') { //如果是登录页面路径，就直接next()
             next();
         } else { //不然就跳转到登录；
             next('/login');
@@ -172,22 +141,6 @@ router.beforeEach((to, from, next) => {
 
     }
 })
-
-// router.beforeEach((to, from, next) => {
-//     // document.title = `${to.meta.title} | erahub_jlja`;
-//     const role = localStorage.getItem('ms_username');
-//     const token = localStorage.getItem('token');
-//     if (!role && to.path !== '/login') {
-//         next('/login');
-//     } else if (to.meta.permission) {
-//         // 如果是管理员权限则可进入，这里只是简单的模拟管理员权限而已
-//         role === 'admin'
-//             ? next()
-//             : next('/403');
-//     } else {
-//         next();
-//     }
-// });
 
 
 export default router;

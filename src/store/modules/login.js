@@ -7,6 +7,7 @@ export default ({
     state: {
         id: 0,
         username:"",
+        trueName:"",
         locked: false,
         token: getToken(),
         roles: [],
@@ -24,6 +25,9 @@ export default ({
         },
         SET_USERNAME: (state, username) => {
             state.username = username
+        },
+        SET_TRUENAME: (state, trueName) => {
+            state.trueName = trueName
         },
         // SET_TOKEN: (state, token) => {
         //     state.token = getToken()
@@ -65,6 +69,7 @@ export default ({
                 let user = data.user;
                 commit('SET_ID', user.id);
                 commit('SET_USERNAME', user.username);
+                commit('SET_TRUENAME', user.trueName);
                 commit('SET_LOCKED', user.locked);
                 commit('SET_ROLES', user.roles);
                 commit('SET_PERMISSIONS', user.permissions);
