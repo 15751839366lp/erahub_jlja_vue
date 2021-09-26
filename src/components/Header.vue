@@ -74,6 +74,7 @@
                         ElMessage.success("登出成功");
                         localStorage.removeItem("ms_username");
                         localStorage.removeItem("token");
+                        localStorage.removeItem("store");
                         router.push("/login");
                     }).catch(err => {
                         router.push("/login");
