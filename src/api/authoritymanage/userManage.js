@@ -1,23 +1,17 @@
-import service from '../utils/request'
+import service from '../../utils/request'
 
-export  function login(data){
+export function getUserList(data){
     return service.request({
-        url: '/account/login',
+        url: '/user/getUserList',
         method: 'post',
         data,
     })
 }
 
-export function logout(){
+export function updateUserData(data){
     return service.request({
-        url: '/account/logout',
-        method: 'get',
-    })
-}
-
-export function getUserInfo(){
-    return service.request({
-        url: '/account/getUserInfo',
+        url: '/user/updateUserData',
         method: 'post',
+        data,
     })
 }

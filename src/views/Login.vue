@@ -71,11 +71,16 @@
                             text: 'Loading',
                         });
                         login(param).then(res => {
+                            if(res.data.code >= 400){
+                                ElMessage.error(res.data.msg);
+                                loading.close();
+                                return false;
+                            }
                             localStorage.setItem("ms_username", param.username);
                             localStorage.setItem("token", res.headers.authorization);
-                            ElMessage.success("登录成功");
                             store.dispatch("login/getUserInfo").then(() => {
                                 router.push('/');
+                                ElMessage.success("登录成功");
                                 loading.close();
                             }).catch(() => {
                                 ElMessage.error("数据错误");

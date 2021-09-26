@@ -3,7 +3,7 @@
         <div class="crumbs">
             <el-breadcrumb separator="/">
                 <el-breadcrumb-item>
-                    <i class="el-icon-lx-cascades"></i> 基础表格
+                    <i class="el-icon-lx-cascades"></i> 用户数据
                 </el-breadcrumb-item>
             </el-breadcrumb>
         </div>
@@ -16,32 +16,18 @@
                 <el-input v-model="query.name" placeholder="用户名" class="handle-input mr10"></el-input>
                 <el-button type="primary" icon="el-icon-search" @click="handleSearch">搜索</el-button>
             </div>
-            <el-table :data="tableData" border class="table" ref="multipleTable" height="600" style="width: 100%" header-cell-class-name="table-header">
+            <el-table :data="tableData" border class="table" ref="multipleTable"
+                      height="500" style="width: 100%" row-style="height:30px" :cell-style="{padding:'2px 0'}"
+                      header-cell-class-name="table-header">
                 <el-table-column fixed prop="id" label="ID" width="55" align="center"></el-table-column>
-                <el-table-column fixed prop="name" label="用户名"></el-table-column>
-                <el-table-column label="账户余额">
-                    <template #default="scope">￥{{ scope.row.money }}</template>
-                </el-table-column>
-                <el-table-column label="头像(查看大图)" align="center">
+                <el-table-column fixed prop="username" label="用户名" width="150" align="center"></el-table-column>
+                <el-table-column prop="createTime" label="创建时间"></el-table-column>
+                <el-table-column prop="updateTime" label="更新时间"></el-table-column>
+                <el-table-column width="100" label="锁定" align="center">
                     <template #default="scope">
-                        <el-image class="table-td-thumb" :src="scope.row.thumb" :preview-src-list="[scope.row.thumb]">
-                        </el-image>
+                        <el-switch :loading="lockSwitchLoading" v-model="scope.row.lockedModel" @change="switchBeforeChange(scope)" active-color="#13ce66" inactive-color="#ff4949" />
                     </template>
                 </el-table-column>
-                <el-table-column prop="address" label="地址"></el-table-column>
-                <el-table-column label="状态" align="center">
-                    <template #default="scope">
-                        <el-tag :type="
-                                scope.row.state === '成功'
-                                    ? 'success'
-                                    : scope.row.state === '失败'
-                                    ? 'danger'
-                                    : ''
-                            ">{{ scope.row.state }}</el-tag>
-                    </template>
-                </el-table-column>
-
-                <el-table-column prop="date" label="注册时间"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="180" align="center">
                     <template #default="scope">
                         <el-button type="text" icon="el-icon-edit" @click="handleEdit(scope.$index, scope.row)">编辑
@@ -51,9 +37,10 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <div class="pagination">
-                <el-pagination background layout="total, prev, pager, next" :current-page="query.pageIndex"
-                    :page-size="query.pageSize" :total="pageTotal" @current-change="handlePageChange"></el-pagination>
+            <div class="demo-pagination-block">
+                <el-pagination background layout="total, sizes, prev, pager, next, jumper" :current-page="query.pageIndex"
+                    :page-size="query.pageSize" :page-sizes="[5, 10, 30, 50]" :total="pageTotal"
+                    @size-change="handleSizeChange" @current-change="handlePageChange"></el-pagination>
             </div>
         </div>
 
@@ -80,173 +67,32 @@
 <script>
 import { ref, reactive } from "vue";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { fetchData } from "../../../api/index";
+import { getUserList,updateUserData } from "../../../api/authoritymanage/userManage";
 
 export default {
-    name: "basetable",
+    name: "usermanage",
     setup() {
         const query = reactive({
-            address: "",
-            name: "",
+            id: "",
+            username: "",
+            locked: "",
+            deleted: "",
+            startCreateTime: "",
+            endCreateTime: "",
             pageIndex: 1,
             pageSize: 10,
         });
         const tableData = ref([]);
         const pageTotal = ref(0);
+        const lockSwitchLoading = ref(false);
         // 获取表格数据
         const getData = () => {
-            fetchData(query).then((res) => {
-                tableData.value = [{
-                    "id": 1,
-                    "name": "张三",
-                    "money": 123,
-                    "address": "广东省东莞市长安镇",
-                    "state": "成功",
-                    "date": "2019-11-1",
-                    "thumb": "https://lin-xin.gitee.io/images/post/wms.png"
-                },
-                    {
-                        "id": 2,
-                        "name": "李四",
-                        "money": 456,
-                        "address": "广东省广州市白云区",
-                        "state": "成功",
-                        "date": "2019-10-11",
-                        "thumb": "https://lin-xin.gitee.io/images/post/node3.png"
-                    },
-                    {
-                        "id": 3,
-                        "name": "王五",
-                        "money": 789,
-                        "address": "湖南省长沙市",
-                        "state": "失败",
-                        "date": "2019-11-11",
-                        "thumb": "https://lin-xin.gitee.io/images/post/parcel.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },{
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },{
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },{
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },{
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                    {
-                        "id": 4,
-                        "name": "赵六",
-                        "money": 1011,
-                        "address": "福建省厦门市鼓浪屿",
-                        "state": "成功",
-                        "date": "2019-10-20",
-                        "thumb": "https://lin-xin.gitee.io/images/post/notice.png"
-                    },
-                ];
-                pageTotal.value = res.pageTotal || 1000;
+            getUserList(query).then((res) => {
+                res.data.data.records.forEach(function (userData) {
+                    userData.lockedModel = !userData.locked;
+                });
+                tableData.value = res.data.data.records;
+                pageTotal.value = res.data.data.total;
             });
         };
         getData();
@@ -259,6 +105,10 @@ export default {
         // 分页导航
         const handlePageChange = (val) => {
             query.pageIndex = val;
+            getData();
+        };
+        const handleSizeChange = (val) => {
+            query.pageSize = val;
             getData();
         };
 
@@ -297,17 +147,45 @@ export default {
             });
         };
 
+        //锁定用户
+        const switchBeforeChange = (scope) => {
+            lockSwitchLoading.value = true;
+            let data = {
+                "id": scope.row.id,
+                "locked": !scope.row.locked,
+            }
+            updateUserData(data).then((res) => {
+                scope.row.locked = !scope.row.locked;
+                if(!scope.row.locked){
+                    ElMessage.success(`解锁成功`);
+                }else{
+                    ElMessage.success(`锁定成功`);
+                }
+                lockSwitchLoading.value = false;
+            }).catch((error)=>{
+                if(scope.row.locked){
+                    ElMessage.error(`解锁失败`);
+                }else{
+                    ElMessage.error(`锁定失败`);
+                }
+                lockSwitchLoading.value = false;
+            });
+        };
+
         return {
             query,
             tableData,
             pageTotal,
+            lockSwitchLoading,
             editVisible,
             form,
             handleSearch,
             handlePageChange,
+            handleSizeChange,
             handleDelete,
             handleEdit,
             saveEdit,
+            switchBeforeChange
         };
     },
 };
@@ -330,16 +208,11 @@ export default {
     width: 100%;
     font-size: 14px;
 }
+
 .red {
     color: #ff0000;
 }
 .mr10 {
     margin-right: 10px;
-}
-.table-td-thumb {
-    display: block;
-    margin: auto;
-    width: 40px;
-    height: 40px;
 }
 </style>

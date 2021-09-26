@@ -12,8 +12,3 @@ app
     .use(router)
     .mount('#app')
 
-
-// import axios from 'axios'
-// Vue.prototype.$axios = axios
-//
-// axios.defaults.baseURL = '/api';
